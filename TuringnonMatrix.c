@@ -2,50 +2,50 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Cada estado é representado pelo tipo estado (struct estados_t)
+//Cada estado Ã© representado pelo tipo estado (struct estados_t)
 typedef struct estados_t{
-	int count;//variável inteira que itera os vetores abaixo, também é responsável a relação entre eles.
-	char leitura[10];//qual caractere da fita é lido na transição.
-	char reescrita[10];//qual caractere é reescrito sobre o que é lido na transição.
-	char direcao[10];//para qual direção se move a "cabeça do leitor", no caso desse programa é incremento ou decremento no index da cadeia.
-	int destino[10];//em qual estado a máquina se encontrará após a transição.
+	int count;//variÃ¡vel inteira que itera os vetores abaixo, tambÃ©m Ã© responsÃ¡vel a relaÃ§Ã£o entre eles.
+	char leitura[10];//qual caractere da fita Ã© lido na transiÃ§Ã£o.
+	char reescrita[10];//qual caractere Ã© reescrito sobre o que Ã© lido na transiÃ§Ã£o.
+	char direcao[10];//para qual direÃ§Ã£o se move a "cabeÃ§a do leitor", no caso desse programa Ã© incremento ou decremento no index da cadeia.
+	int destino[10];//em qual estado a mÃ¡quina se encontrarÃ¡ apÃ³s a transiÃ§Ã£o.
 }estado;
 
-//As características gerais do automato são gravados no tipo dadosTuring(struct dados)
+//As caracterÃ­sticas gerais do automato sÃ£o gravados no tipo dadosTuring(struct dados)
 typedef struct dados{
-	int	qtdEstados, qtdTerminais, qtdEstendidos, aceitacao;//respectivamente quantidade total de estados, quantidade de símbolos terminais, quantidades de símbolos do alfabeto estendido e estado de aceitação.
+	int	qtdEstados, qtdTerminais, qtdEstendidos, aceitacao;//respectivamente quantidade total de estados, quantidade de sÃ­mbolos terminais, quantidades de sÃ­mbolos do alfabeto estendido e estado de aceitaÃ§Ã£o.
 
-	char *terminais, *estendidos;//String que contém todos os símbolos terminais e String que contém todos os símbolos do alfabeto estendido.
+	char *terminais, *estendidos;//String que contÃ©m todos os sÃ­mbolos terminais e String que contÃ©m todos os sÃ­mbolos do alfabeto estendido.
 }dadosTuring;
 
 
-void leTransicoes(dadosTuring dados,estado *total);//Função que lê um número x de transições conforme o padrão q x q0 y D, onde q, q0 ? Q, x, y ? S' e D ? {R, L, S}.
+void leTransicoes(dadosTuring dados,estado *total);//FunÃ§Ã£o que lÃª um nÃºmero x de transiÃ§Ãµes conforme o padrÃ£o q x q0 y D, onde q, q0 ? Q, x, y ? S' e D ? {R, L, S}.
 
-void lerCadeias(dadosTuring dados, int wtff, estado *total);//Função que lê um número x de cadeias e chama a função de teste, a partir do retorno da teste, escreve o resultado "aceita" ou "rejeita".
+void lerCadeias(dadosTuring dados, int wtff, estado *total);//FunÃ§Ã£o que lÃª um nÃºmero x de cadeias e chama a funÃ§Ã£o de teste, a partir do retorno da teste, escreve o resultado "aceita" ou "rejeita".
 
-int testaCadeia(char *cadeia, dadosTuring dados, estado *total);//Função responsável por avaliar a cadeia, retorna 1 caso a função seja aceita pelo automato e 0 caso contrário.
+int testaCadeia(char *cadeia, dadosTuring dados, estado *total);//FunÃ§Ã£o responsÃ¡vel por avaliar a cadeia, retorna 1 caso a funÃ§Ã£o seja aceita pelo automato e 0 caso contrÃ¡rio.
 
 int main(){
-	int i, j;//i e j são iteradores, **MatrizFunção é a matriz cujo par (x,y) identifica a existência de caminhos entre o estado Qx e Qy (posicao [i][j] == 1).
-	estado *total;// *total é um vetor do tipo estado que guarda todos o n estados do automato (struct estados_t)
+	int i;//i e j sÃ£o iteradores, **MatrizFunÃ§Ã£o Ã© a matriz cujo par (x,y) identifica a existÃªncia de caminhos entre o estado Qx e Qy (posicao [i][j] == 1).
+	estado *total;// *total Ã© um vetor do tipo estado que guarda todos o n estados do automato (struct estados_t)
 	dadosTuring dados;
 	
 	
 	scanf("%d", &dados.qtdEstados);
-	total = (estado*)malloc(dados.qtdEstados*sizeof(estado));//alocação dinâmica do vetor de estados.
+	total = (estado*)malloc(dados.qtdEstados*sizeof(estado));//alocaÃ§Ã£o dinÃ¢mica do vetor de estados.
 	
-	for(i = 0; i < dados.qtdEstados; i++)//esse laço inicializa o contador de controle dos estados como 0, note que cada estado tem um contador próprio
+	for(i = 0; i < dados.qtdEstados; i++)//esse laÃ§o inicializa o contador de controle dos estados como 0, note que cada estado tem um contador prÃ³prio
 		total[i].count = 0;
 		
 	scanf("%d", &dados.qtdTerminais);
-	dados.terminais = (char *)malloc(dados.qtdTerminais*(sizeof(char)));//44-48 aloca dinamicamente o vetor de símbolos terminais e os lê um por um
+	dados.terminais = (char *)malloc(dados.qtdTerminais*(sizeof(char)));//44-48 aloca dinamicamente o vetor de sÃ­mbolos terminais e os lÃª um por um
 	for(i = 0; i < dados.qtdTerminais; i++){
 		scanf(" %c", &dados.terminais[i]);
 
 	}
 	
 	scanf("%d", &dados.qtdEstendidos);
-	dados.estendidos = (char *)malloc(dados.qtdEstendidos * (sizeof(char)));//50-55 aloca dinamicamente o vetor de símbolos do alfabeto estendido e os lê um por um
+	dados.estendidos = (char *)malloc(dados.qtdEstendidos * (sizeof(char)));//50-55 aloca dinamicamente o vetor de sÃ­mbolos do alfabeto estendido e os lÃª um por um
 	for(i = 0; i < dados.qtdEstendidos; i++){
 		scanf(" %c", &dados.estendidos[i]);
 
@@ -54,12 +54,12 @@ int main(){
 	scanf("%d", &dados.aceitacao);
 
 	leTransicoes(dados, total);//linha 93
-	/*for(i = 0; i < dados.qtdEstados; i ++){      Optei por manter esse trecho comentado, pois foi usado no debug e é útil.
-		printf("Estado Q%d\n", i);					Esse trecho imprime os dados coletados na função acima facilitando a visualização da correlação
+	/*for(i = 0; i < dados.qtdEstados; i ++){      Optei por manter esse trecho comentado, pois foi usado no debug e Ã© Ãºtil.
+		printf("Estado Q%d\n", i);					Esse trecho imprime os dados coletados na funÃ§Ã£o acima facilitando a visualizaÃ§Ã£o da correlaÃ§Ã£o
 		for(j = 0; j < total[i].count; j++){		dos vetores dentro do estado[i] (qi).
-			printf(" %c ",total[i].leitura[j]);		Lê se: Símbolo terminal lido		 |
-		}												   Símbolo a ser resscrito		|
-		printf("\n");									   Estado que a máquina entrará |
+			printf(" %c ",total[i].leitura[j]);		LÃª se: SÃ­mbolo terminal lido		 |
+		}												   SÃ­mbolo a ser resscrito		|
+		printf("\n");									   Estado que a mÃ¡quina entrarÃ¡ |
 		for(j = 0; j < total[i].count; j++){
 			printf(" %c ",total[i].reescrita[j]);
 		}
@@ -76,38 +76,38 @@ int main(){
 }
 
 void leTransicoes(dadosTuring dados,estado *total){
-	int transicoes, i, source, dest;//transicoes é a quatidade de transições a serem lidas, i é um iterador, linha 100, linha 103
+	int transicoes, i, source, dest;//transicoes Ã© a quatidade de transiÃ§Ãµes a serem lidas, i Ã© um iterador, linha 100, linha 103
 	char read, write, dir;//linha 102, linha 104, linha 105
 	
 	scanf("%d", &transicoes);
 	
 	for(i = 0; i < transicoes; i++){
 	
-		scanf("%d", &source);//estado atual da máquina
+		scanf("%d", &source);//estado atual da mÃ¡quina
 		scanf(" %c", &read);//caractere atual lido da fita
 		scanf("%d", &dest);//estado que esse caractere leva
 		scanf(" %c", &write);//caractere a ser reescrito antes mover na fita
-		scanf(" %c", &dir);//direção a mover na fita
+		scanf(" %c", &dir);//direÃ§Ã£o a mover na fita
 	
-		total[source].leitura[total[source].count] = read;				//Aqui começa a correlaçõa, lendo "read", devo reescrever "write" e mover
+		total[source].leitura[total[source].count] = read;				//Aqui comeÃ§a a correlaÃ§Ãµa, lendo "read", devo reescrever "write" e mover
 		total[source].reescrita[total[source].count] = write;			//para "dir" na fita e entrar no estado "dest". Com o uso do mesmo iterador
-		total[source].destino[total[source].count] = dest;				//nos 3 vetores diferentes têm-se a relação de dados diferentes no mesmo
-		total[source].direcao[total[source].count] = dir;				//índice.
-		total[source].count++;											//Count só incrementado após as inserções e é atrelado a cada estado. 
+		total[source].destino[total[source].count] = dest;				//nos 3 vetores diferentes tÃªm-se a relaÃ§Ã£o de dados diferentes no mesmo
+		total[source].direcao[total[source].count] = dir;				//Ã­ndice.
+		total[source].count++;											//Count sÃ³ incrementado apÃ³s as inserÃ§Ãµes e Ã© atrelado a cada estado. 
 		
 	}
 }
 
 void lerCadeias(dadosTuring dados,int wtff,  estado *total){
-	int qtdEntradas, i, *result;//qtdEntradas é a quantidade de entradas, i iterador, *result vetor de resultados da avaliação da cadeia.
-	char cadeia[20];//String que representa a cadeia de até 20 elementos.
+	int qtdEntradas, i, *result;//qtdEntradas Ã© a quantidade de entradas, i iterador, *result vetor de resultados da avaliaÃ§Ã£o da cadeia.
+	char cadeia[20];//String que representa a cadeia de atÃ© 20 elementos.
 	scanf("%d", &qtdEntradas);
 	
 	result = (int *)malloc(qtdEntradas*sizeof(int));
 	for(i = 0; i < qtdEntradas; i++){
 		scanf("%s", cadeia);
 		result[i] = testaCadeia(cadeia, dados, total);//linha 138
-	}//o retorno da testa cadeia é carregada no vetor de resultados
+	}//o retorno da testa cadeia Ã© carregada no vetor de resultados
 	
 	for(i = 0; i < qtdEntradas; i++){
 		if(result[i] == 1)//para os casos positivos
@@ -121,23 +121,23 @@ void lerCadeias(dadosTuring dados,int wtff,  estado *total){
 
 int testaCadeia(char *cadeia, dadosTuring dados, estado *total){
 	char currChar;//caractere atual na fita
-	int currState = 0, i, j, currCharIndex = 0;//currState é o estado atual da máquina (iniciado em q0 por padrão), i e j iteradores, currCharIndex é o indíce na fita para atualizar currChar;
+	int currState = 0, j, currCharIndex = 0;//currState Ã© o estado atual da mÃ¡quina (iniciado em q0 por padrÃ£o), i e j iteradores, currCharIndex Ã© o indÃ­ce na fita para atualizar currChar;
 	
 	currChar = *cadeia;//o mesmo que fazer currCharr = cadeia[0], inicia currChar para o caractere mais a esquerda da fita
-	while(currState != dados.aceitacao){	//o loop é executado até atingir o estado final (a partir do qual não há transições) ou até que uma transição n seja possível(explicado posteriormente)
-		for(j = 0; j < total[currState].count; j++){ //dentro do vetor de estados na posição do estado atual busca-se valor do contador para evitar acessos desnecessários de memória.
-			if(total[currState].leitura[j] == currChar){//dentro do vetor de estados, busca-se os caracteres lidos pelo estado e os compara com currChar, caso esse loop chege ao final sem que esse if seja satisfeito j não passará a verifivação da linha 174.
-				cadeia[currCharIndex] = total[currState].reescrita[j];//a posição atual na cadeia é reescrita com o elemento do vetor de símbolos estendidos de mesmo índice encontrado no laço e aceito no if.
+	while(currState != dados.aceitacao){	//o loop Ã© executado atÃ© atingir o estado final (a partir do qual nÃ£o hÃ¡ transiÃ§Ãµes) ou atÃ© que uma transiÃ§Ã£o n seja possÃ­vel(explicado posteriormente)
+		for(j = 0; j < total[currState].count; j++){ //dentro do vetor de estados na posiÃ§Ã£o do estado atual busca-se valor do contador para evitar acessos desnecessÃ¡rios de memÃ³ria.
+			if(total[currState].leitura[j] == currChar){//dentro do vetor de estados, busca-se os caracteres lidos pelo estado e os compara com currChar, caso esse loop chege ao final sem que esse if seja satisfeito j nÃ£o passarÃ¡ a verifivaÃ§Ã£o da linha 174.
+				cadeia[currCharIndex] = total[currState].reescrita[j];//a posiÃ§Ã£o atual na cadeia Ã© reescrita com o elemento do vetor de sÃ­mbolos estendidos de mesmo Ã­ndice encontrado no laÃ§o e aceito no if.
 				
-				if(total[currState].direcao[j] == 'R'){//caso a direção seja direita o currCharIndex é incrementado uma unidade
+				if(total[currState].direcao[j] == 'R'){//caso a direÃ§Ã£o seja direita o currCharIndex Ã© incrementado uma unidade
 					currCharIndex++;
 					
-						if(currCharIndex >= strlen(cadeia))//para garantir que a fita é "infinita", quando o index extrapola os limites do vetor cadeia, currChar é atualizado para 'B', que é o símbolo que representa o Branco 
+						if(currCharIndex >= strlen(cadeia))//para garantir que a fita Ã© "infinita", quando o index extrapola os limites do vetor cadeia, currChar Ã© atualizado para 'B', que Ã© o sÃ­mbolo que representa o Branco 
 								currChar = 'B';
-						else//caso o índice esteja dentro do vetor
-							currChar = cadeia[currCharIndex];//currChar recebe o caractere na posição currCharIndex da fita.
+						else//caso o Ã­ndice esteja dentro do vetor
+							currChar = cadeia[currCharIndex];//currChar recebe o caractere na posiÃ§Ã£o currCharIndex da fita.
 						
-				}else{//caso não vá para direita 'R', pode ir para esquerda 'L' decrementando uma unidade e as intruções seguintes são espelhadas da direita com mudanças no limite do vetor
+				}else{//caso nÃ£o vÃ¡ para direita 'R', pode ir para esquerda 'L' decrementando uma unidade e as intruÃ§Ãµes seguintes sÃ£o espelhadas da direita com mudanÃ§as no limite do vetor
 					if(total[currState].direcao[j] == 'L'){
 						currCharIndex--;
 						
@@ -146,31 +146,31 @@ int testaCadeia(char *cadeia, dadosTuring dados, estado *total){
 							else
 								currChar = cadeia[currCharIndex];
 								
-					}//caso não vá nem para direita nem para esquerda quer dizer que não há movimento 'S', logo o currCharIndex não é alterado.
+					}//caso nÃ£o vÃ¡ nem para direita nem para esquerda quer dizer que nÃ£o hÃ¡ movimento 'S', logo o currCharIndex nÃ£o Ã© alterado.
 				}
 				
-				currState = total[currState].destino[j];//feitas as verificações e edições o estado atual é modificado para o destino de mesmo índice j dentro do vetor de estados.
-				j = 200;//j é reescrito para 200 (código 200 retornado em uma conexão bem sucedida na web e valor inalcançável por j) caso passe o if para futura verificação.
-				break;//feitas todas as movimentações o loop interno é interrompido
+				currState = total[currState].destino[j];//feitas as verificaÃ§Ãµes e ediÃ§Ãµes o estado atual Ã© modificado para o destino de mesmo Ã­ndice j dentro do vetor de estados.
+				j = 200;//j Ã© reescrito para 200 (cÃ³digo 200 retornado em uma conexÃ£o bem sucedida na web e valor inalcanÃ§Ã¡vel por j) caso passe o if para futura verificaÃ§Ã£o.
+				break;//feitas todas as movimentaÃ§Ãµes o loop interno Ã© interrompido
 			}
 		}
 		
-		if(j != 200)//caso o if não seja executado, j não atinge 200 e o loop externo é interrompido.
+		if(j != 200)//caso o if nÃ£o seja executado, j nÃ£o atinge 200 e o loop externo Ã© interrompido.
 			break;
 		
 	}
-	//printf("fita: %s -> q%d\n", cadeia, currState); linha de debug mostra o estado de parada da máquina e o resultado da cadeia após as modificações
+	//printf("fita: %s -> q%d\n", cadeia, currState); linha de debug mostra o estado de parada da mÃ¡quina e o resultado da cadeia apÃ³s as modificaÃ§Ãµes
 
-	if(currState != dados.aceitacao){//nos casos em que a máquina termina fora do estado de aceitação (caso do automato de cadeias a^2n)
-		for(j = 0; j < total[currState].count; j++){	//é feita uma verificação onde busca-se a possibilidade de ler lambda ('-') para  chegar ao 
-			if(total[currState].leitura[j] == '-'){		//estado de aceitação.
-				currState = total[currState].destino[j];//caso a verificação seja bem sucedida o estado atual é atualizado (tlvz eu deva fzr isso em loop, vai q o último n é o de aceitação)
+	if(currState != dados.aceitacao){//nos casos em que a mÃ¡quina termina fora do estado de aceitaÃ§Ã£o (caso do automato de cadeias a^2n)
+		for(j = 0; j < total[currState].count; j++){	//Ã© feita uma verificaÃ§Ã£o onde busca-se a possibilidade de ler lambda ('-') para  chegar ao 
+			if(total[currState].leitura[j] == '-'){		//estado de aceitaÃ§Ã£o.
+				currState = total[currState].destino[j];//caso a verificaÃ§Ã£o seja bem sucedida o estado atual Ã© atualizado (tlvz eu deva fzr isso em loop, vai q o Ãºltimo n Ã© o de aceitaÃ§Ã£o)
 				break;
 			}
 		}
 	}
 	
-	if(currState != dados.aceitacao)//por fim, se o estado final do automato for o de aceitação o retorno é 1, senão é 0 -> linha 126
+	if(currState != dados.aceitacao)//por fim, se o estado final do automato for o de aceitaÃ§Ã£o o retorno Ã© 1, senÃ£o Ã© 0 -> linha 126
 		return 0;
 	else
 		return 1;
